@@ -1,11 +1,3 @@
-
-var FULL_COLOR_NAMES = {
-  'r': 'red',
-  'b': 'blue',
-  'g': 'green',
-  'y': 'yellow'
-};
-
 var sendMessageToActiveTab = function(message, callback) {
   chrome.tabs.getSelected(null, function(tab) {
     chrome.tabs.sendMessage(tab.id, {text: message}, callback || function() {});

@@ -1,6 +1,14 @@
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
+var FULL_COLOR_NAMES = {
+  'r': 'red',
+  'b': 'blue',
+  'g': 'green',
+  'y': 'yellow'
+};
+
 var currentColor = 'r';
+var labIsOn;
 var favicon = document.querySelector('link[rel$=icon]');
 
 var observer = new MutationObserver(function(mutations, observer) {
@@ -95,11 +103,16 @@ function changeFavicon(color) {
   var favicon = getFavicon();
   if (favicon) {
     var oldUrl = favicon.href;
+    if (typeof labIsOn == 'undefined') {
+      // We only need to set this once. The page will be reloaded when labs
+      // configuration changes.
+      labIsOn = oldUrl.indexOf('unreadcountfavicon') != -1;
+    }
     var newUrl;
-    if (oldUrl.indexOf('unreadcountfavicon') == -1) {
-      // The lab is off.
+    if (!labIsOn) {
+      var fullColorName = FULL_COLOR_NAMES[color] || 'red';
       newUrl = 'https://ssl.gstatic.com/ui/v1/icons/mail/images/2/' +
-          'unreadcountfavicon/0' + colorSuffix + '_2x.png';
+          'unreadcountfavicon/' + fullColorName + '.ico';
     } else {
       // The lab is on.
       // Strip off the already existing color suffix.
