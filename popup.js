@@ -23,9 +23,10 @@ var onPopupLoaded = function(e) {
   }
   chrome.tabs.getSelected(null, function(tab) {
     if (!/mail.google.com/.test(tab.url)) {
-      document.body.innerHTML = '<div style="width: 150px;">' +
-          '<p>I am only useful on a Gmail tab &#9786;</p>' +
-          '<p><a href="#" id="gmail">Go to Gmail</a></p></div>';
+      document.body.innerHTML = '<div style="width: 100px;">' +
+          '<p align="center"><font size="3">I am only useful on a Gmail tab</font> </p>'+
+          '<p align="center"><font size="5">&#9786;</font></p>' +
+          '<p align="center"><font size="3"><a href="#" id="gmail">Go to Gmail</a></font></p></div>';
       document.getElementById('gmail').onclick = function(e) {
         chrome.tabs.create({'url': 'http://www.gmail.com'});
       }
