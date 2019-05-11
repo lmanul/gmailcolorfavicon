@@ -20,6 +20,10 @@
     "128": "icon_128.png",
     "250": "icon_250.png"
   },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "permissions": [
     "https://mail.google.com/*",
     "tabs"
