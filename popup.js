@@ -1,10 +1,11 @@
 var sendMessageToActiveTab = function(message, callback) {
   chrome.tabs.getSelected(null, function(tab) {
-    var tabUrl = tab.url
-        var regexp =/mail.google.com\/mail\/u\/(\d)/;
-        var match = regexp.exec(tabUrl);
-
-    chrome.tabs.sendMessage(tab.id, {id: match[1], color: message, caller: "popup.js"}, callback || function() {});
+    var regexp =/mail.google.com\/mail\/u\/(\d)/;
+    var match = regexp.exec(tab.url);
+    if (match != null){
+      var userId = match[1];
+      chrome.tabs.sendMessage(tab.id, {id: userId, color: message, caller: "popup.js"}, callback || function() {});
+    }
   });
 };
 

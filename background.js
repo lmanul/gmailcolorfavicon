@@ -1,4 +1,9 @@
 function getColorFromLocalStorage() {
+
+    var regexp =/mail.google.com\/mail\/u\/(\d)/;
+    var match = regexp.exec(window.location.href);
+    var userId = match[1];
+
     var colorChar = localStorage.getItem("ronhks.gmail.favicon.color."+userId);
     if (colorChar == null){
       colorChar = 'r';
