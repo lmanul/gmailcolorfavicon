@@ -7,13 +7,26 @@ var FULL_COLOR_NAMES = {
   'y': 'yellow'
 };
 
-var currentColor = 'r';
+function getColorFromLocalStorage() {
+  var regexp =/mail.google.com\/mail\/u\/(\d)/;
+  var match = regexp.exec(window.location.href);
+  var userId = match[1];
+
+  var colorChar = localStorage.getItem("ronhks.gmail.favicon.color."+userId);
+  if (colorChar == null){
+    colorChar = 'r';
+  }
+  return colorChar;
+}
+
+var currentColor = getColorFromLocalStorage();
+
 var labIsOn;
 var favicon = document.querySelector('link[rel$=icon]');
 
 var observer = new MutationObserver(function(mutations, observer) {
   if (shouldReactToMutationSet(mutations)) {
-    changeFavicon(currentColor);
+    changeFavicon(null, currentColor);
   }
 });
 
@@ -82,12 +95,11 @@ function shouldReactToMutationSet(mutations) {
 }
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-  if (msg.text == 'email') {
+  if (msg.color == 'email') {
     sendResponse(scrapeEmailAddressFromPage());
   } else {
-    changeFavicon(msg.text);
+    changeFavicon(msg.id, msg.color, msg.caller);
   }
-  //sendResponse(document.all[0].outerHTML);
 });
 
 function setNewFaviconUrl(favicon, url) {
@@ -96,8 +108,9 @@ function setNewFaviconUrl(favicon, url) {
   favicon.setAttribute('manual', '1');
 }
 
-function changeFavicon(color) {
+function changeFavicon(userId, color, caller) {
   currentColor = color;
+  var color = persist(userId, color, caller);
   var colorSuffix = (color == 'r') ? '' : '-' + color;
   var shouldReturn = 0;
   var favicon = getFavicon();
@@ -129,5 +142,23 @@ function changeFavicon(color) {
       }
     }
     setNewFaviconUrl(favicon, newUrl);  
+  }
+}
+
+function isChangedByuser(userId, colorChar, caller) {
+  return userId != null && colorChar != null && caller === "popup.js";
+}
+
+function persist (userId, color, caller){
+
+  var colorChar = getColorFromLocalStorage();
+
+  if (isChangedByuser(userId, colorChar, caller)) {
+    localStorage.setItem("ronhks.gmail.favicon.color."+userId, color);
+    return color;
+  } else if (color !== colorChar){
+    return colorChar;
+  } else {
+    return color;
   }
 }

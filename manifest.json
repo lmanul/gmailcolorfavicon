@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Gmail Color Favicon",
-  "version": "0.15",
+  "version": "0.2",
   "description": "Allows you to change the color of your Gmail favicon to make it easier to distinguish between accounts.",
   "browser_action": {
     "default_title": "Pick a color",
@@ -19,6 +19,10 @@
     "72": "icon_72.png",
     "128": "icon_128.png",
     "250": "icon_250.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "permissions": [
     "https://mail.google.com/*",
